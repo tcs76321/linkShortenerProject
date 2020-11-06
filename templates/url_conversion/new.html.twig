@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New UrlConversion{% endblock %}
+
+{% block body %}
+    <h1>Create new UrlConversion</h1>
+
+    {{ include('url_conversion/_form.html.twig') }}
+
+    <a href="{{ path('url_conversion_index') }}">back to list</a>
+{% endblock %}

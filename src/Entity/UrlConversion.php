@@ -47,6 +47,11 @@ class UrlConversion
      */
     private $LastRedirectIP;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $BackHalf;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class UrlConversion
     public function setLastRedirectIP(?string $LastRedirectIP): self
     {
         $this->LastRedirectIP = $LastRedirectIP;
+
+        return $this;
+    }
+
+    public function getBackHalf(): ?string
+    {
+        return $this->BackHalf;
+    }
+
+    public function setBackHalf(?string $BackHalf): self
+    {
+        $this->BackHalf = $BackHalf;
 
         return $this;
     }

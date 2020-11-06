@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UrlConversion index{% endblock %}
+
+{% block body %}
+    <h1>UrlConversion index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>LongUrl</th>
+                <th>ShortUrl</th>
+                <th>CreationTime</th>
+                <th>Redirections</th>
+                <th>CreatorIP</th>
+                <th>LastRedirectIP</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for url_conversion in url_conversions %}
+            <tr>
+                <td>{{ url_conversion.id }}</td>
+                <td>{{ url_conversion.LongUrl }}</td>
+                <td>{{ url_conversion.ShortUrl }}</td>
+                <td>{{ url_conversion.CreationTime ? url_conversion.CreationTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ url_conversion.Redirections }}</td>
+                <td>{{ url_conversion.CreatorIP }}</td>
+                <td>{{ url_conversion.LastRedirectIP }}</td>
+                <td>
+                    <a href="{{ path('url_conversion_show', {'id': url_conversion.id}) }}">show</a>
+                    <a href="{{ path('url_conversion_edit', {'id': url_conversion.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('url_conversion_new') }}">Create new</a>
+{% endblock %}
