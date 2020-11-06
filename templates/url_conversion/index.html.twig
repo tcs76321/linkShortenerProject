@@ -15,6 +15,7 @@
                 <th>Redirections</th>
                 <th>CreatorIP</th>
                 <th>LastRedirectIP</th>
+                <th>BackHalf</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -28,6 +29,7 @@
                 <td>{{ url_conversion.Redirections }}</td>
                 <td>{{ url_conversion.CreatorIP }}</td>
                 <td>{{ url_conversion.LastRedirectIP }}</td>
+                <td>{{ url_conversion.BackHalf }}</td>
                 <td>
                     <a href="{{ path('url_conversion_show', {'id': url_conversion.id}) }}">show</a>
                     <a href="{{ path('url_conversion_edit', {'id': url_conversion.id}) }}">edit</a>

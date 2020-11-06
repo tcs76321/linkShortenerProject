@@ -23,7 +23,7 @@ class UrlConversion
     private $LongUrl;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $ShortUrl;
 

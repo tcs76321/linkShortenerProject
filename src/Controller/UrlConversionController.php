@@ -10,13 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/")
- */
+///**
+// * @Route("/")
+// */
 class UrlConversionController extends AbstractController
 {
     /**
-     * @Route("/", name="url_conversion_index", methods={"GET"})
+     * @Route("/index", name="url_conversion_index", methods={"GET"})
      */
     public function index(UrlConversionRepository $urlConversionRepository): Response
     {
