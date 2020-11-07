@@ -111,7 +111,11 @@ class UrlConversionController extends AbstractController
             );
 
             //TODO: Short URL and back half
-            $urlConversion->setShortUrl($response->getStatusCode());
+            if($response->getStatusCode() == 201)
+            {
+                $responseArray = $response->toArray();
+                $urlConversion->setShortUrl($responseArray['link']);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($urlConversion);
