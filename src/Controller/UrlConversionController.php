@@ -18,6 +18,16 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class UrlConversionController extends AbstractController
 {
     /**
+     * @var HttpClientInterface
+     */
+    private $httpClientInterface;
+
+    public function __construct(HttpClientInterface $httpClientInterface)
+    {
+        $this->httpClientInterface = $httpClientInterface;
+    }
+
+    /**
      * @Route("/index", name="url_conversion_index", methods={"GET"})
      */
     public function index(UrlConversionRepository $urlConversionRepository): Response
@@ -52,6 +62,7 @@ class UrlConversionController extends AbstractController
 
     /**
      * @Route("/", name="url_conversion_new_from_base", methods={"GET","POST"})
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function newFromBase(Request $request): Response
     {
@@ -81,8 +92,26 @@ class UrlConversionController extends AbstractController
             $urlConversion->setCreatorIP($creatorIP);
 
             //TODO: Shorten it
+            $response = $this->httpClientInterface->request(
+                'POST',
+                'https://api-ssl.bitly.com/v4/shorten',
+                [
+                    'headers' => [
+                        'Authorization' => 'Bearer d00ffb4928d0244a0707e9abf825b6449c8a78fc',
+                        'Content-Type' => 'application/json'
+                    ],
+                    'auth_bearer' => 'd00ffb4928d0244a0707e9abf825b6449c8a78fc',
+//                    'body' => 'JSON-encoded',
+                    'json' => [
+                        'long_url' => $urlConversion->getLongUrl(),
+                        'domain' => 'bit.ly',
+//                        'group_guid' => 'Ba1bc23dE4F'
+                    ]
+                ]
+            );
 
             //TODO: Short URL and back half
+            $urlConversion->setShortUrl($response->getStatusCode());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($urlConversion);
