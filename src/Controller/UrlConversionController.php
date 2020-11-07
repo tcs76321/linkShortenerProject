@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 ///**
 // * @Route("/")
@@ -59,7 +60,30 @@ class UrlConversionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $urlConversion->setBackHalf("Does this work?");
+            $urlConversion->setRedirections(0);
+
+            $urlConversion->setCreationTime(new \DateTime());//empty default is now
+
+            //Creator IP
+            if(!empty($_SERVER['HTTP_CLIENT_IP']))
+            {
+                $creatorIP = $_SERVER['HTTP_CLIENT_IP'];
+            }
+            elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+            {
+                $creatorIP = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+            else
+            {
+                $creatorIP = $_SERVER['REMOTE_ADDR'];
+            }
+
+            $urlConversion->setCreatorIP($creatorIP);
+
+            //TODO: Shorten it
+
+            //TODO: Short URL and back half
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($urlConversion);
             $entityManager->flush();
