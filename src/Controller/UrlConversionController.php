@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\UrlConversion;
+use App\Form\ShortenLinkType;
 use App\Form\UrlConversionType;
 use App\Repository\UrlConversionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,6 +40,31 @@ class UrlConversionController extends AbstractController
             $entityManager->persist($urlConversion);
             $entityManager->flush();
 
+            return $this->redirectToRoute('url_conversion_index');
+        }
+
+        return $this->render('url_conversion/new.html.twig', [
+            'url_conversion' => $urlConversion,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/", name="url_conversion_new_from_base", methods={"GET","POST"})
+     */
+    public function newFromBase(Request $request): Response
+    {
+        $urlConversion = new UrlConversion();
+        $form = $this->createForm(ShortenLinkType::class, $urlConversion);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $urlConversion->setBackHalf("Does this work?");
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($urlConversion);
+            $entityManager->flush();
+
+            //TODO: change this!V
             return $this->redirectToRoute('url_conversion_index');
         }
 
