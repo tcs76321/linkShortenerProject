@@ -91,7 +91,7 @@ class UrlConversionController extends AbstractController
 
             $urlConversion->setCreatorIP($creatorIP);
 
-            //TODO: Shorten it
+            //Shorten it
             $response = $this->httpClientInterface->request(
                 'POST',
                 'https://api-ssl.bitly.com/v4/shorten',
@@ -110,11 +110,19 @@ class UrlConversionController extends AbstractController
                 ]
             );
 
-            //TODO: Short URL and back half
+            //Short URL and back half
             if($response->getStatusCode() == 201)
             {
                 $responseArray = $response->toArray();
                 $urlConversion->setShortUrl($responseArray['link']);
+                $backHalfTemp = $responseArray['link'];
+                $backHalfTemp = substr($backHalfTemp, 8);// get rid of https://
+                while($backHalfTemp[0] != '/')//must be variable because root urls that have bitly domain like omcscs.gatech.edu will use their base url
+                {
+                    $backHalfTemp = substr($backHalfTemp, 1);
+                }
+                $backHalfTemp = substr($backHalfTemp, 1);//get rid of the last slash too or else will have to later
+                $urlConversion->setBackHalf($backHalfTemp);
             }
 
             $entityManager = $this->getDoctrine()->getManager();
