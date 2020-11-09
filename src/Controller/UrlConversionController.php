@@ -126,13 +126,26 @@ class UrlConversionController extends AbstractController
                 $backHalfTemp = substr($backHalfTemp, 1);//get rid of the last slash too or else will have to later
                 $urlConversion->setBackHalf($backHalfTemp);
             }
+            else{
+                $urlConversion->setShortUrl("API CALLED FAILED UPON CREATION");
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($urlConversion);
+                $entityManager->flush();
+
+                return $this->render('url_conversion/failure.html.twig');
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($urlConversion);
             $entityManager->flush();
 
-            //TODO: change this!V
-            return $this->redirectToRoute('url_conversion_index');
+            $urlR = $this->generateUrl(
+                'url_conversion_view',
+                ['BackHalf' => $backHalfTemp]
+            );
+
+            return $this->redirect($urlR);
         }
 
         return $this->render('url_conversion/new.html.twig', [
@@ -170,6 +183,17 @@ class UrlConversionController extends AbstractController
         $urlC = $this->getDoctrine()
             ->getRepository(UrlConversion::class)
             ->findOneBy(['BackHalf' => $slug]);
+
+        if(!$urlC)
+        {
+            return $this->render('UrlView/noneFound.html.twig');
+        }
+
+        $urlC->setRedirections($urlC->getRedirections() + 1);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($urlC);
+        $entityManager->flush();
 
         return $this->redirect($urlC->getLongUrl());
     }
