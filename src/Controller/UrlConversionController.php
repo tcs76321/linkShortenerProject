@@ -6,6 +6,8 @@ use App\Entity\UrlConversion;
 use App\Form\ShortenLinkType;
 use App\Form\UrlConversionType;
 use App\Repository\UrlConversionRepository;
+use DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,7 +75,7 @@ class UrlConversionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $urlConversion->setRedirections(0);
 
-            $urlConversion->setCreationTime(new \DateTime());//empty default is now
+            $urlConversion->setCreationTime(new DateTime());//empty default is now
 
             //Creator IP
             if(!empty($_SERVER['HTTP_CLIENT_IP']))
@@ -140,13 +142,36 @@ class UrlConversionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="url_conversion_show", methods={"GET"})
+     * @Route("/id/{id}", name="url_conversion_show", methods={"GET"})
      */
     public function show(UrlConversion $urlConversion): Response
     {
         return $this->render('url_conversion/show.html.twig', [
             'url_conversion' => $urlConversion,
         ]);
+    }
+
+    /**
+     * @Route("/view/{BackHalf}", name="url_conversion_view", methods={"GET"})
+     */
+    public function view(UrlConversion $urlConversion): Response
+    {
+        return $this->render('UrlView/viewOne.html.twig', [
+            'url_conversion' => $urlConversion,
+        ]);
+    }
+
+    /**
+     * @Route("/{slug}", name="url_conversion_redirect", methods={"GET","POST"})
+     * @return Response
+     */
+    public function BackHalfRedirect(string $slug): Response
+    {
+        $urlC = $this->getDoctrine()
+            ->getRepository(UrlConversion::class)
+            ->findOneBy(['BackHalf' => $slug]);
+
+        return $this->redirect($urlC->getLongUrl());
     }
 
     /**

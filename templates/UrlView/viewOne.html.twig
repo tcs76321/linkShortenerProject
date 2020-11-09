@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UrlConversion{% endblock %}
+
+{% block body %}
+    <h1>UrlConversion</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ url_conversion.id }}</td>
+        </tr>
+        <tr>
+            <th>LongUrl</th>
+            <td>{{ url_conversion.LongUrl }}</td>
+        </tr>
+        <tr>
+            <th>ShortUrl</th>
+            <td>{{ url_conversion.ShortUrl }}</td>
+        </tr>
+        <tr>
+            <th>BackHalf</th>
+            <td>{{ url_conversion.BackHalf }}</td>
+        </tr>
+        <tr>
+            <th>CreationTime</th>
+            <td>{{ url_conversion.CreationTime ? url_conversion.CreationTime|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Redirections</th>
+            <td>{{ url_conversion.Redirections }}</td>
+        </tr>
+        <tr>
+            <th>CreatorIP</th>
+            <td>{{ url_conversion.CreatorIP }}</td>
+        </tr>
+        <tr>
+            <th>LastRedirectIP</th>
+            <td>{{ url_conversion.LastRedirectIP }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+{#    <a href="{{ path('url_conversion_index') }}">back to list</a>#}
+
+{#    <a href="{{ path('url_conversion_edit', {'id': url_conversion.id}) }}">edit</a>#}
+
+{#    {{ include('url_conversion/_delete_form.html.twig') }}#}
+{% endblock %}
