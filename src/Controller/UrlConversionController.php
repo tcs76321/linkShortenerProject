@@ -99,10 +99,10 @@ class UrlConversionController extends AbstractController
                 'https://api-ssl.bitly.com/v4/shorten',
                 [
                     'headers' => [
-                        'Authorization' => 'Bearer d00ffb4928d0244a0707e9abf825b6449c8a78fc',
+                        'Authorization' => 'Bearer :(',
                         'Content-Type' => 'application/json'
                     ],
-                    'auth_bearer' => 'd00ffb4928d0244a0707e9abf825b6449c8a78fc',
+                    'auth_bearer' => ':(',
 //                    'body' => 'JSON-encoded',
                     'json' => [
                         'long_url' => $urlConversion->getLongUrl(),
